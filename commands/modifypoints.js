@@ -87,12 +87,6 @@ module.exports.run = function (client, message, args) {
 
 
         let reason = message.content.slice(message.content.indexOf(args[3]));
-        if (args.length < 4) {
-            message.channel.send(embeds.provideInput(message, "a reason", "Provide a reason for modifying the points"));
-            return false;
-        }
-        
- 
         
         if (message.mentions.users.size >= 1 && args.length >= 2) {
             id = message.mentions.users.first().id;
@@ -162,6 +156,10 @@ module.exports.run = function (client, message, args) {
                     message.channel.send(embeds.providePointBalance(message, "add"));
                     return;
                 }
+                if (args.length < 4) {
+                    message.channel.send(embeds.provideInput(message, "a reason", "Provide a reason for modifying the points"));
+                    return false;
+                }
                 checkIfUserExists((doesExist)=>{
                     if (!doesExist) {message.channel.send(embeds.userDoesntHaveColumn(message));}
                     
@@ -182,6 +180,10 @@ module.exports.run = function (client, message, args) {
                 if (args.length < 3) {
                     message.channel.send(embeds.providePointBalance(message, "remove"));
                     return;
+                }
+                if (args.length < 4) {
+                    message.channel.send(embeds.provideInput(message, "a reason", "Provide a reason for modifying the points"));
+                    return false;
                 }
                 checkIfUserExists((doesExist)=>{
                     if (!doesExist) {message.channel.send(embeds.userDoesntHaveColumn(message));}
