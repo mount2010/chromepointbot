@@ -86,10 +86,11 @@ module.exports.run = function (client, message, args) {
         pointsOffset = parseInt(pointsOffset)
 
 
-        if (args[3]) {let reason = message.content.slice(message.content.indexOf(args[3]));}
-        else {
-            reason = "No reason";
+        let reason = message.content.slice(message.content.indexOf(args[3]));
+        if (!reason) {
+            message.channel.send(embeds.provideInput("a reason", "Provide a reason for modifying the points"));
         }
+ 
         
         if (message.mentions.users.size >= 1 && args.length >= 2) {
             id = message.mentions.users.first().id;
