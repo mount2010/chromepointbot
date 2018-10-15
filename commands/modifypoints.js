@@ -72,7 +72,7 @@ module.exports.run = function (client, message, args) {
         //args 0: operation, args 1: userid, args 2: amount, args 3: reason
         if (args.length < 1) {
             message.channel.send(embeds.tellMeWhatToDo(message));
-            return;
+            return false;
         }
         if (args.length < 2) {
             message.channel.send(embeds.provideInput(message, "somebody", "Mention or provide an ID"));
@@ -87,9 +87,11 @@ module.exports.run = function (client, message, args) {
 
 
         let reason = message.content.slice(message.content.indexOf(args[3]));
-        if (!reason) {
-            message.channel.send(embeds.provideInput("a reason", "Provide a reason for modifying the points"));
+        if (args.length < 4) {
+            message.channel.send(embeds.provideInput(message, "a reason", "Provide a reason for modifying the points"));
+            return false;
         }
+        
  
         
         if (message.mentions.users.size >= 1 && args.length >= 2) {
@@ -116,7 +118,6 @@ module.exports.run = function (client, message, args) {
             connection.query(`SELECT points FROM user WHERE userid=${connection.escape(id)}`, (err, res)=>{
                 if (err) {throw err}
                 const currentBalance = res[0].points;
-                console.log(currentBalance);
                 callback(currentBalance);
             });
         }
@@ -135,6 +136,7 @@ module.exports.run = function (client, message, args) {
                 connection.query(`UPDATE user SET points=?, history=? WHERE userid=${connection.escape(id)}`, [toWhat, historyToInsert], (err, res)=>{
                     if (err) {message.channel.send(embeds.errorOccured(message, err)); return}
                     message.channel.send(embeds.addPointsOk(message, toWhat, reason));
+                    connection.release();
                 })
             });
         }

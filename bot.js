@@ -9,7 +9,7 @@ const bot = new discord.Client();
 bot.login(config.token).catch((err)=>{console.log(err)});
 bot.on("ready", ()=>{
     console.log("Logged in successfully as "+bot.user.username);
-    bot.user.setActivity(`Chrome Point Bot | ${config.prefix}help`)
+    bot.user.setActivity(`Chrome Point Bot | ${config.prefix}help`);
 });
 
 messageEvent.register(bot);

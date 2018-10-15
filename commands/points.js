@@ -75,6 +75,7 @@ module.exports.run = async function (client, message, args) {
             }
             else {
                 message.channel.send(embeds.pointsEmbed(message, username, whosePoints, parseHistory(result[0].history), result[0].points));
+                connection.release();
             }
         })
     });
