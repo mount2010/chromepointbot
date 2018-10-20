@@ -1,5 +1,5 @@
 module.exports.run = function (client, message, args) {
-
+    
 }
 module.exports.info = {
     name: "reward",
