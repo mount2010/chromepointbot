@@ -99,7 +99,7 @@ module.exports.run = async function (client, message, args) {
                 }, time);
                 const collected = await this.sentMsg.awaitReactions(
                         (reaction, user)=>{
-                            return (reaction.emoji.name == '⬅' || reaction.emoji.name == '➡') && user.id === message.author.id;
+                            return (reaction.emoji.name == '⬅' || reaction.emoji.name == '➡' || reaction.emoji.name == '❌') && user.id === message.author.id;
                         }, 
                         {max: 1, time}
                 );
@@ -120,6 +120,10 @@ module.exports.run = async function (client, message, args) {
                 this.page += 1; 
                 this.changePage();
             }
+            else if (collected.has('❌')) {
+                message.channel.send(":x: Query canceled. I hope you got what you were looking for!");
+                return;
+            }
         }
         async changePage (change) {
             const history = this.pagedHistory[this.page] ? this.pagedHistory[this.page] :  [{name: "No history", value:"This user has no points history"}];
@@ -130,6 +134,7 @@ module.exports.run = async function (client, message, args) {
             
             await this.sentMsg.react('⬅');
             await this.sentMsg.react('➡');
+            await this.sentMsg.react('❌');
             this.listenReactions();
         }
     }
