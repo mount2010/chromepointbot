@@ -159,7 +159,7 @@ module.exports.run = function (client, message, args) {
                             
                             connection.query(`UPDATE user SET history=${connection.escape(insertHistory)} WHERE userid=${connection.escape(id)}`, (err, res)=>{
                                 if (err) {message.channel.send(embeds.errorOccured(message, err)); return}
-                                message.channel.send(embeds.changeHistoryOk(message, insertHistory, "Added"));
+                                message.channel.send(embeds.changeHistoryOk(message, JSON.stringify(history), "Added"));
                                 connection.release();
                             })
                             //modifyHistory(JSON.stringify(currentHistory), "Added");
@@ -210,7 +210,7 @@ module.exports.run = function (client, message, args) {
                                     connection.query(`UPDATE user SET history=${connection.escape(insertHistory)} WHERE userid=${connection.escape(id)}`, (err, res)=>{
                                         if (err) {throw err}
                                         else {
-                                            message.channel.send(`Removed ${JSON.stringify(historyToRemove)}, id ${args[2]}`);
+                                            message.channel.send(embeds.changeHistoryOk(message, historyToRemove, `Removed id ${args[2]}, `));
                                             connection.release();
                                             return;
                                         }

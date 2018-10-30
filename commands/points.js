@@ -87,11 +87,14 @@ module.exports.run = async function (client, message, args) {
             this.page = 0;
             this.hasSent;
             this.sentMsg;
+            this.queryTimeout;
         }
-        async listenReactions () {
+        async listenReactions (isARepeat = false) {
             try {
                 const time = 20000;
-                client.setTimeout(()=>{
+                
+                client.clearTimeout(this.queryTimeout);
+                this.queryTimeout = client.setTimeout(()=>{
                     this.sentMsg.channel.send(`:clock: Query timed out after ${time/1000}s.`);
                 }, time);
                 const collected = await this.sentMsg.awaitReactions(
@@ -108,12 +111,12 @@ module.exports.run = async function (client, message, args) {
         }
         reactHeard (collected) {
             if (collected.has('⬅')) {
-                if (this.page - 1 < 0) {this.listenReactions(); return}
+                if (this.page - 1 < 0) {this.listenReactions(true); return}
                 this.page -= 1; 
                 this.changePage();
             }
             else if (collected.has('➡')) {
-                if (this.page + 1 > this.amountOfPages) {this.listenReactions(); return}
+                if (this.page + 1 > this.amountOfPages) {this.listenReactions(true); return}
                 this.page += 1; 
                 this.changePage();
             }
