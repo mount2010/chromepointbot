@@ -12,6 +12,8 @@ bot.on("ready", ()=>{
     bot.user.setActivity(`Chrome Point Bot | ${config.prefix}help`);
 });
 
+bot.on('error', console.error);
+
 messageEvent.register(bot);
 handler.registerCommandsIn(`${config.commandsFolder}`);
 messageEvent.handler(handler);
