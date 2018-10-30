@@ -90,11 +90,15 @@ module.exports.run = async function (client, message, args) {
         }
         async listenReactions () {
             try {
+                const time = 20000;
+                client.setTimeout(()=>{
+                    this.sentMsg.channel.send(`:clock: Query timed out after ${time/1000}s.`);
+                }, time);
                 const collected = await this.sentMsg.awaitReactions(
                         (reaction, user)=>{
                             return (reaction.emoji.name == '⬅' || reaction.emoji.name == '➡') && user.id === message.author.id;
                         }, 
-                        {max: 1, time: 20000}
+                        {max: 1, time}
                 );
                 this.reactHeard(collected);
             }
