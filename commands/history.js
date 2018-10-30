@@ -235,7 +235,8 @@ module.exports.run = function (client, message, args) {
 module.exports.info = {
     name: ["modifyhistory", "mh"], 
     help: "Modify the point history of someone",
-    restriction: "Admin only"
+    restriction: "Admin only",
+    cooldown: 0
 }
 
 

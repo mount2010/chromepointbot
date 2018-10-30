@@ -4,5 +4,6 @@ module.exports.run = function (client, message, args) {
 }
 module.exports.info = {
     name: "ping",
-    help: "Display the ping to Discord servers"
+    help: "Display the ping to Discord servers",
+    cooldown: 10
 }

@@ -5,7 +5,8 @@ module.exports.run = function (client, message, args) {
 module.exports.info = {
     name: ["eval"],
     help: "Evaluate some JS",
-    restriction: "Admins only"
+    restriction: "Developer/admin only",
+    cooldown: 0
 }
 
 

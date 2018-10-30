@@ -242,7 +242,8 @@ module.exports.run = function (client, message, args) {
 module.exports.info = {
     name: ["modify", "modifypoints", "m"],
     help: "Modify point balances",
-    restriction: "Admins only"
+    restriction: "Admins only",
+    cooldown: 0
 }
 
 

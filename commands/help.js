@@ -61,6 +61,7 @@ module.exports.run = function (client, message, args) {
             return str;
         }
         for (let i = 0; i < commands.length; i++) {
+            if (commands[i].nohelp) {continue}
             fields.push({
                 name: (Array.isArray(commands[i].name)?`${makeAliasNameSting(commands[i].name)}`:commands[i].name), 
                 value: (commands[i].help === undefined?"No help specified":commands[i].help)+(commands[i].restriction !== undefined?` **${commands[i].restriction}**`:''),
@@ -82,5 +83,6 @@ module.exports.run = function (client, message, args) {
 
 module.exports.info = {
     name: "help",
-    help: "Display help for the bot"
+    help: "Display help for the bot",
+    cooldown: 10
 }

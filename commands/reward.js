@@ -4,7 +4,8 @@ module.exports.run = function (client, message, args) {
 module.exports.info = {
     name: "reward",
     help: "Manage rewards",
-    restriction: "Admins only."
+    restriction: "Admins only.",
+    cooldown: 0
 }
 
 

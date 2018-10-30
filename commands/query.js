@@ -15,7 +15,8 @@ module.exports.run = function (client, message, args) {
 module.exports.info = {
     name: "query",
     help: "Perform a query on the database.",
-    restriction: "Developer only"
+    restriction: "Developer/admin only",
+    cooldown: 0
 }
 
 module.exports.permission = function (message) {
