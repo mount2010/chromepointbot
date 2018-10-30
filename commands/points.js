@@ -1,9 +1,9 @@
 const embeds = {
-    pointsEmbed: function (page, message, username, userId, history, points) {
+    pointsEmbed: function (page, numPages, message, username, userId, history, points) {
         return {
             embed: {
                 title: `${username}'s points`,
-                description: `${userId===message.author.id?'You':'They'} have ${points} points.\n**Page ${page+1}**`,
+                description: `${userId===message.author.id?'You':'They'} have ${points} points.\n**Page ${page+1}/${numPages}**`,
                 fields: history,
                 color: 0x00ff00
             }
@@ -116,7 +116,7 @@ module.exports.run = async function (client, message, args) {
         }
         async changePage (change) {
             const history = this.pagedHistory[this.page] ? this.pagedHistory[this.page] :  [{name: "No history", value:"This user has no points history"}];
-            const embed = embeds.pointsEmbed(this.page, message, username, whosePoints, history, this.result[0].points);
+            const embed = embeds.pointsEmbed(this.page, this.pagedHistory.length, message, username, whosePoints, history, this.result[0].points);
 
             if (!this.hasSent) {this.sentMsg = await message.channel.send(embed); this.hasSent = true;}
             else {this.sentMsg = await this.sentMsg.edit(embed)}
