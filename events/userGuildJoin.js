@@ -27,7 +27,7 @@ module.exports.register = ((bot)=>{
                     member.send(`Welcome back, ${member.user.username}, your points are still at ${res[0].points}.`);
                 }
                 else {
-                    connection.query(`INSERT INTO user (userid, points, history) VALUES (${connection.escape(member.id)}, '${defaultPoints}', '${defaultHistory}')`, (error, res)=>{
+                    connection.query(`INSERT INTO user (userid, points, history) VALUES (${connection.escape(member.id)}, '${defaultPoints}', '${connection.escape(defaultHistory)}')`, (error, res)=>{
                         if (error) {member.send(`Something went wrong with initializing your points account, please ask an admin to import your account: ${error}`)}
                         else {member.send(embeds.guildMemberAdd(member))}
                         console.log(`User ${member.user.username} joined, userid ${member.id}, DB ${JSON.stringify(res)}`);

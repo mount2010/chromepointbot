@@ -1,10 +1,10 @@
 const embeds = {
-    pointsEmbed: function (message, username, userId, history, points) {
+    pointsEmbed: function (page, message, username, userId, history, points) {
         return {
             embed: {
                 title: `${username}'s points`,
-                description: `${userId===message.author.id?'You':'They'} have ${points} points.`,
-                fields: history===undefined?[{name: "No history", value:"This user has no points history"}]:history,
+                description: `${userId===message.author.id?'You':'They'} have ${points} points.\n**Page ${page+1}**`,
+                fields: history,
                 color: 0x00ff00
             }
         }
@@ -42,8 +42,14 @@ module.exports.run = async function (client, message, args) {
         }
         else {
             if (typeof parseInt(args[0]) === "number") {
+                if (message.guild.available) {
+                    message.guild.fetchMember(args[0]).then((member)=>{
+                        username = member.user.username;
+                    }).catch(()=>{
+                        username = args[0];
+                    })
+                }
                 whosePoints = args[0];
-                username = args[0]; //Lies, but this is not important, only for the embed
             }
         }
         if (whosePoints === undefined) {
@@ -55,15 +61,74 @@ module.exports.run = async function (client, message, args) {
     function parseHistory (historyJSON) {
         const history = JSON.parse(historyJSON);
         if (history[0] === undefined) {return undefined}
-        const fields = [];
-        for (let i = 0; i < history.length; i++) {
-            fields.push({
-                name: `[ID ${i}] ${history[i].amount} on ${history[i].date? history[i].date:"Unrecorded date"}`,
-                value: `for ${history[i].reason}`
-            })
-        }   
-        return fields;
+        const pages = [];
+        const numPages = Math.ceil(history.length/10);
+        const remaindingFields = Math.floor(history.length % 10);
+
+        for (let i = 0; i < numPages; i++) {
+            const page = [];
+            for (let j = 0; j < (i + 1 == numPages ? remaindingFields : 9); j++) {
+                const k = j + (i * 10);
+                page.push({
+                    name: `[ID ${k}] ${history[k].amount} on ${history[k].date? history[k].date:"Unrecorded date"}`,
+                    value: `for ${history[k].reason}`
+                })
+            }   
+            pages.push(page);
+        }
+        return pages;
     }
+
+    class Paginator {
+        constructor (pagedHistory, result) {
+            this.pagedHistory = pagedHistory || [];
+            this.result = result;
+            this.amountOfPages = this.pagedHistory.length - 1 || 0;
+            this.page = 0;
+            this.hasSent;
+            this.sentMsg;
+        }
+        async listenReactions () {
+            try {
+                const collected = await this.sentMsg.awaitReactions(
+                        (reaction, user)=>{
+                            return (reaction.emoji.name == '⬅' || reaction.emoji.name == '➡') && user.id === message.author.id;
+                        }, 
+                        {max: 1, time: 20000}
+                );
+                this.reactHeard(collected);
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }
+        reactHeard (collected) {
+            if (collected.has('⬅')) {
+                if (this.page - 1 < 0) {this.listenReactions(); return}
+                this.page -= 1; 
+                this.changePage();
+            }
+            else if (collected.has('➡')) {
+                if (this.page + 1 > this.amountOfPages) {this.listenReactions(); return}
+                this.page += 1; 
+                this.changePage();
+            }
+        }
+        async changePage (change) {
+            const history = this.pagedHistory[this.page] ? this.pagedHistory[this.page] :  [{name: "No history", value:"This user has no points history"}];
+            const embed = embeds.pointsEmbed(this.page, message, username, whosePoints, history, this.result[0].points);
+
+            if (!this.hasSent) {this.sentMsg = await message.channel.send(embed); this.hasSent = true;}
+            else {this.sentMsg = await this.sentMsg.edit(embed)}
+            
+            await this.sentMsg.react('⬅');
+            await this.sentMsg.react('➡');
+            this.listenReactions();
+        }
+    }
+
+
+    
     try {
     pool.getConnection(function (error, connection) {
         if (error) {throw error}
@@ -74,7 +139,9 @@ module.exports.run = async function (client, message, args) {
                 return;
             }
             else {
-                message.channel.send(embeds.pointsEmbed(message, username, whosePoints, parseHistory(result[0].history), result[0].points));
+                const historyPaged = parseHistory(result[0].history);
+                const paginator = new Paginator(historyPaged, result);
+                paginator.changePage(0);
                 connection.release();
             }
         })
