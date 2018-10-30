@@ -122,6 +122,7 @@ module.exports.run = async function (client, message, args) {
             }
             else if (collected.has('❌')) {
                 message.channel.send(":x: Query canceled. I hope you got what you were looking for!");
+                client.clearTimeout(this.queryTimeout);
                 return;
             }
         }
@@ -133,8 +134,8 @@ module.exports.run = async function (client, message, args) {
             else {this.sentMsg = await this.sentMsg.edit(embed)}
             
             await this.sentMsg.react('⬅');
-            await this.sentMsg.react('➡');
             await this.sentMsg.react('❌');
+            await this.sentMsg.react('➡');
             this.listenReactions();
         }
     }
