@@ -1,11 +1,12 @@
 const mysql = require("mysql");
+const secrets = require(`${process.cwd()}/secrets.json`);
 const config = require(`${process.cwd()}/config.json`);
 
 const pool = mysql.createPool({
     connectionLimit: 10,
     host: config.db.host,
-    user: config.db.username,
-    password: config.db.password,
+    user: secrets.db.username,
+    password: secrets.db.password,
     database: config.db.database
 })
 

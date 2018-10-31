@@ -1,13 +1,12 @@
-const defaultPoints = '100';
+const config = require(`${process.cwd()}/config.json`);
 const day = new Date();
-const defHistory = [{amount: `+${defaultPoints}`, reason: 'Free 100 Points for Joining', date: `${day.getDate() + '/'+ (day.getMonth()+1) + '/'+day.getFullYear()}` }]
+const defHistory = [{amount: `+${config.joinPoints}`, reason: 'Free 100 Points for Joining', date: `${day.getDate() + '/'+ (day.getMonth()+1) + '/'+day.getFullYear()}` }]
 const defaultHistory = JSON.stringify(defHistory);
 const embeds = {
     guildMemberAdd: function (user) {
-        const config = require(`${process.cwd()}/config.json`);
         return {embed: {
             title: `Welcome to the server, ${user.user.username}`,
-            description: `Your points account has been created with 100 starting points. \n For more information, check my help: ${config.prefix}help.`,
+            description: `Your points account has been created with ${config.joinPoints} starting points. \n For more information, check my help: ${config.prefix}help.`,
             image: {
                 url: user.user.avatarURL
             },
@@ -27,7 +26,7 @@ module.exports.register = ((bot)=>{
                     member.send(`Welcome back, ${member.user.username}, your points are still at ${res[0].points}.`);
                 }
                 else {
-                    connection.query(`INSERT INTO user (userid, points, history) VALUES (${connection.escape(member.id)}, '${defaultPoints}', '${connection.escape(defaultHistory)}')`, (error, res)=>{
+                    connection.query(`INSERT INTO user (userid, points, history) VALUES (${member.id}, '${config.joinPoints}', '${connection.escape(defaultHistory)}')`, (error, res)=>{
                         if (error) {member.send(`Something went wrong with initializing your points account, please ask an admin to import your account: ${error}`)}
                         else {member.send(embeds.guildMemberAdd(member))}
                         console.log(`User ${member.user.username} joined, userid ${member.id}, DB ${JSON.stringify(res)}`);

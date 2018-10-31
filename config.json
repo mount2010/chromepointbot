@@ -1,0 +1,18 @@
+{
+    "developer": {
+        "id": "143026985763864576",
+        "username": "Mount2010#9649"
+    },
+    "admins": [
+        "107868153240883200",
+        "143026985763864576"
+    ],
+    "prefix": "$",
+    "commandsFolder": "commands",
+    "joinPoints": 100,
+    "db": {
+        "host": "localhost",
+        "port": "",
+        "database": "test"
+    }
+}
