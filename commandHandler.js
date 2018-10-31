@@ -94,14 +94,16 @@ class CommandHandler {
     getInfoFor (command) {
         return (this.commands.has(command)?this.commands.get(command).info:{});
     }
-    go (what, client, message, args) {
+    async go (what, client, message, args) {
         const cooldown = this.cooldownManager.checkCooldown(message.author);
         if (cooldown) {
             this.commands.get(what).run(client, message, args);
             this.cooldownManager.insertCooldown(message.author, what);
         }
         else {
-            message.channel.send(embeds.cooldown(this.cooldownManager.checkTimeLeft(message.author), what));
+            const cooldownLeft = this.cooldownManager.checkTimeLeft(message.author);
+            const msg = await message.channel.send(embeds.cooldown(cooldownLeft, what));
+            client.setTimeout(()=>{msg.delete()}, cooldownLeft);
         }
     }
     run (what, client, message, args) {
