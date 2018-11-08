@@ -243,7 +243,13 @@ module.exports.info = {
     name: ["modify", "modifypoints", "m"],
     help: "Modify point balances",
     restriction: "Admins only",
-    cooldown: 0
+    cooldown: 0,
+    arguments: [
+        ["Operation", "The operation to perform on the user's points"],
+        ["User", "A mention to the user or their userid"],
+        ["Amount", "The amount to add or remove"],
+        ["Reason", "The reason for this operation"]
+    ]
 }
 
 

@@ -5,11 +5,11 @@ module.exports.run = function (client, message, args) {
     const pool = require(`${process.cwd()}/db/connection.js`).pool;
 
     if (args.length < 1) {
-        message.channel.send(embeds.invalidOrEmptyInput(message, "no arguments", "four arguments", "Argument order is $modifyhistory USERID OPERATION AMOUNT DATE HISTORY"));
+        message.channel.send(embeds.invalidOrEmptyInput(message, "no arguments", "four arguments", "Argument order is $modifyhistory OPERATION USERID AMOUNT DATE HISTORY"));
         return false;
     }
     if (args.length < 2) {
-        message.channel.send(embeds.invalidOrEmptyInput(message, "one argument", "four arguments", "Argument order is $modifyhistory USERID OPERATION AMOUNT DATE HISTORY"));
+        message.channel.send(embeds.invalidOrEmptyInput(message, "one argument", "four arguments", "Argument order is $modifyhistory OPERATION USERID AMOUNT DATE HISTORY"));
         return false;
     }
 
@@ -50,7 +50,7 @@ module.exports.run = function (client, message, args) {
             case "add":
             case "a":
                 if (args.length < 3) {
-                    message.channel.send(embeds.invalidOrEmptyInput(message, "no history to import", "an history to import", "Your argument order may be wrong, try doing the command again. Argument order: $modifyhistory OPERATION USER AMOUNT DATE HISTORY"));
+                    message.channel.send(embeds.invalidOrEmptyInput(message, "no history to import", "an history to import", "Your argument order may be wrong, try doing the command again. Argument order: $modifyhistory OPERATION USERID AMOUNT DATE HISTORY"));
                     return;
                 }
                 try {
@@ -64,7 +64,7 @@ module.exports.run = function (client, message, args) {
                     }
 
                     if (!reason || !amount || !date) {
-                        message.channel.send(embeds.invaildOrEmptyInput(message, "a not valid argument", "arguments in the order: USER OPERATION AMOUNT DATE HISTORY", "Try again."));
+                        message.channel.send(embeds.invaildOrEmptyInput(message, "a not valid argument", "arguments in the order: $modifyhistory OPERATION USERID AMOUNT DATE HISTORY", "Try again."));
                         connection.release();
                         return;
                     }
@@ -162,7 +162,14 @@ module.exports.info = {
     name: ["modifyhistory", "mh"], 
     help: "Modify the point history of someone",
     restriction: "Admin only",
-    cooldown: 0
+    cooldown: 0,
+    arguments: [
+        ["Operation", "The operation to perform on the user's history. May be \`add\` or \`remove\` or \`import\`"], 
+        ["Userid", "The user's userid or a mention to the user"],
+        ["Amount", "The amount of points to modify with"],
+        ["Date", "The date this history should be set to"],
+        ["Reason", "The reason this history should be set to"]
+    ]
 }
 
 

@@ -30,7 +30,9 @@ module.exports.run = function (client, message, args) {
             message.channel.send(embeds.commandNotFoundEmbed(message, args[0]));
         }
         else {
-            message.channel.send(embeds.commandHelpEmbed(message, help.name, help.help));
+            let arguments = [{name: "No arguments", value: "This command has no arguments"}];
+            if (help.arguments) {arguments = []; help.arguments.forEach((el)=>{arguments.push({name: el[0], value: el[1]})})}
+            message.channel.send(embeds.commandHelpEmbed(message, help.name, help.help, arguments));
         }
     }    
 }
@@ -38,5 +40,9 @@ module.exports.run = function (client, message, args) {
 module.exports.info = {
     name: "help",
     help: "Display help for the bot",
-    cooldown: 3
+    cooldown: 3,
+    arguments: [
+        ["Nothing", "Display all help"],
+        ["<Command>", "Display help for a specific command"]
+    ]
 }

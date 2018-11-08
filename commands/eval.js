@@ -6,7 +6,10 @@ module.exports.info = {
     name: ["eval"],
     help: "Evaluate some JS",
     restriction: "Developer/admin only",
-    cooldown: 0
+    cooldown: 0,
+    arguments: [
+        ["Code", "JS to be evalulated"]
+    ]
 }
 
 

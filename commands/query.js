@@ -16,7 +16,10 @@ module.exports.info = {
     name: "query",
     help: "Perform a query on the database.",
     restriction: "Developer/admin only",
-    cooldown: 0
+    cooldown: 0,
+    arguments: [
+        ["Query", "The query to do on the database"]
+    ]
 }
 
 module.exports.permission = function (message) {

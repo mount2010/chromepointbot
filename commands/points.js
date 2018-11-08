@@ -141,5 +141,8 @@ module.exports.run = async function (client, message, args) {
 module.exports.info = {
     name: ["points", "$", "p"],
     help: "Display your Chrome giveaway points",
-    cooldown: 3
+    cooldown: 3,
+    arguments: [
+        ["User", "The user's points to view"]
+    ]
 }

@@ -80,9 +80,13 @@ global.embeds = {
      * @argument {Discord.message} message The Discord message this command was ran with
      * @argument {string} name The command being queried
      * @argument {string} help The help for this command
+     * @argument {object[]} arguments Fields for the arguments
      */
-    commandHelpEmbed: function (message, name, help) {
-        return emojiEmbedBase(message, `Help for ${name}`, ":information_source:", true).setDescription(help);
+    commandHelpEmbed: function (message, name, help, arguments) {
+        const embed = emojiEmbedBase(message, `Help for ${name}`, ":information_source:", true)
+        .setDescription(`${help}\n**Arguments**:`);
+        embed.fields = arguments;
+        return embed;
     },
     /**Embed for when a command is not found
      * 
