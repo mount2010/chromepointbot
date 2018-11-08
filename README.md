@@ -8,7 +8,7 @@ Features include point tracking and modification features, and an automated puzz
 Although this bot is meant for a specific server, you can also set it up for use on your own servers.
 To set this bot up:
 
-1. Clone the repository
+### 1. Clone the repository
 
 Download Git [Github Help](https://help.github.com/articles/set-up-git/).
 You will also need [MySQL](https://dev.mysql.com/downloads/mysql/) installed on your server or computer.
@@ -19,7 +19,8 @@ git clone https://github.com/mount2010/chromepointbot
 ```
 
 This will download the repository to your computer.
-2. Set up secrets.json
+
+### 2. Set up secrets.json
 
 Open your favourite text editor, and create a file called secrets.json.
 This is the structure of the file:
@@ -35,17 +36,21 @@ This is the structure of the file:
 ```
 
 Simply fill it in with your details. You can get a token at Discord's Developer portal. Click Add Application.
-3. Install packages
+
+### 3. Install packages
 
 ```bash
     npm install
 ```
 
 This will automatically download and install the dependencies (Discord.js, MySQL) to your computer.
-4. Configure the bot
+
+### 4. Configure the bot
+
 You can configure the bot in config.json and the JS files.
 Please do tell me (Mount2010#9649) if you use my bot! This is optional, but I'd like to know!
-5. Start the bot
+
+### 5. Start the bot
 
 ```bash
     npm start
