@@ -110,7 +110,7 @@ global.embeds = {
         return emojiEmbedBase(message, `That command is on cooldown, please hold on.`, ":clock:", false).setDescription(`Please wait ${Math.ceil(cooldown/1000)}s to use ${command}.`);
     },
     noPermissionEmbed: function (message, command, restriction) {
-        return emojiEmbedBase(message, `You don't have permission to use ${command}.`, ":x:", false).setDescription(`${command} is for ${restriction} only.`);
+        return emojiEmbedBase(message, `You don't have permission to use ${command}.`, ":x:", false).setDescription(`${command} has ${restriction} restriction.`);
     },
     commandDoesntExistError: function (message, command) {
         return emojiEmbedBase(message, `${command} does not exist`, ":x:", false).setDescription(`Do ${config.prefix}help for help.`);

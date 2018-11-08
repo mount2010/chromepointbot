@@ -68,7 +68,7 @@ class CommandHandler {
                         this.go(what, client, message, args);
                     }
                     else {
-                        message.channel.send(embeds.noPermissionEmbed(message, what, this.commands.get(what).restriction));
+                        message.channel.send(embeds.noPermissionEmbed(message, what, this.commands.get(what).info.restriction));
                     }
                 }
                 else {
