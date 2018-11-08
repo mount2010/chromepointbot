@@ -1,49 +1,3 @@
-const embeds = {
-    commandNotFoundEmbed: function (command) {
-        return {
-            embed: {
-                title: ":x: Command not found",
-                description: `Command ${command} not found`,
-                color: 0xff0000
-            }
-        }
-    },
-    allCommandsEmbed: function (fields) {
-        return {
-            embed: {
-                title: ":information_source: Bot help",
-                description: "List of all commands",
-                fields: fields,
-                color: 0x00ff00
-            }
-        };
-    },
-    commandEmbed: function (command, commandHelp) {
-        return {
-            embed: {
-                title: `:information_source: Command: ${command}`,
-                description: `${commandHelp}`,
-                color: 0x00ff00
-            }
-        }
-    },
-    errorOccured: function (message, error) {
-        return {embed:{
-            title: "An error occured.",
-            color: 0xff0000,
-            description: `An unknown error occured. Please report this to ${config.admin.username}`,
-            fields: [{
-                name: "Error details",
-                value: `\`\`\`${error}\`\`\``
-            }],
-            footer: {
-                text: `${message.author.username}`,
-                icon_url: `${message.author.avatarURL}`
-            },
-            timestamp: Date.now()
-        }}
-    }
-}
 module.exports.run = function (client, message, args) {
     const handler = require(`${process.cwd()}/bot.js`).handler;
 
@@ -68,15 +22,15 @@ module.exports.run = function (client, message, args) {
             });
         }
 
-        message.channel.send(embeds.allCommandsEmbed(fields));
+        message.channel.send(embeds.allCommandsEmbed(message, fields));
     }
     else {
         const help = handler.getInfoFor(args[0]);
         if (!help.name) {
-            message.channel.send(embeds.commandNotFoundEmbed(args[0]));
+            message.channel.send(embeds.commandNotFoundEmbed(message, args[0]));
         }
         else {
-            message.channel.send(embeds.commandEmbed(help.name, help.help));
+            message.channel.send(embeds.commandHelpEmbed(message, help.name, help.help));
         }
     }    
 }
@@ -84,5 +38,5 @@ module.exports.run = function (client, message, args) {
 module.exports.info = {
     name: "help",
     help: "Display help for the bot",
-    cooldown: 10
+    cooldown: 3
 }

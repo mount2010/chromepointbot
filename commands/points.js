@@ -1,31 +1,3 @@
-const embeds = {
-    pointsEmbed: function (page, numPages, message, username, userId, history, points) {
-        return {
-            embed: {
-                title: `${username}'s points`,
-                description: `${userId===message.author.id?'You':'They'} have ${points} points.\n**Page ${page+1}/${numPages}**`,
-                fields: history,
-                color: 0x00ff00
-            }
-        }
-    },
-    errorOccured: function (message, error, config) {
-        return {embed:{
-            title: "An error occured.",
-            color: 0xff0000,
-            description: `An unknown error occured. Please report this to ${config.admin.username}`,
-            fields: [{
-                name: "Error details",
-                value: `\`\`\`${error}\`\`\``
-            }],
-            footer: {
-                text: `${message.author.username}`,
-                icon_url: `${message.author.avatarURL}`
-            },
-            timestamp: Date.now()
-        }}
-    }
-}
 module.exports.run = async function (client, message, args) {
     const pool = require(`${process.cwd()}/db/connection.js`).pool;
     const config = require(`${process.cwd()}/config.json`);
@@ -128,7 +100,8 @@ module.exports.run = async function (client, message, args) {
         }
         async changePage (change) {
             const history = this.pagedHistory[this.page] ? this.pagedHistory[this.page] :  [{name: "No history", value:"This user has no points history"}];
-            const embed = embeds.pointsEmbed(this.page, this.pagedHistory.length, message, username, whosePoints, history, this.result[0].points);
+            /* const embed = embeds.pointsEmbed(this.page, this.pagedHistory.length, message, username, whosePoints, history, this.result[0].points); */
+            const embed = embeds.pointsEmbed(message, history, this.page, this.pagedHistory.length, whosePoints,  this.result[0].points, whosePoints == message.author.id);
 
             if (!this.hasSent) {this.sentMsg = await message.channel.send(embed); this.hasSent = true;}
             else {this.sentMsg = await this.sentMsg.edit(embed)}
@@ -162,11 +135,11 @@ module.exports.run = async function (client, message, args) {
     }
     catch (err) {
         console.error(err);
-        message.channel.send(embeds.errorOccured(message, err, config));
+        message.channel.send(embeds.errorOccured(message, err));
     } 
 }
 module.exports.info = {
     name: ["points", "$", "p"],
     help: "Display your Chrome giveaway points",
-    cooldown: 30
+    cooldown: 3
 }

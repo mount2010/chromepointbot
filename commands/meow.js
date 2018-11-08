@@ -7,7 +7,7 @@ module.exports.run = function (client, message, args) {
 
 module.exports.info = {
     name: ["meow"],
-    help: "Meow meow meow, you are a cat, meow meow meow.",
+    help: "Meow meow meow, you are a cat, meow meow meow. (Yes, this is a joke.)",
     nohelp: true,
     cooldown: 10
 }

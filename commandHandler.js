@@ -1,52 +1,5 @@
 const fs = require('fs');
-const config = require(`${process.cwd()}/config.json`);
 const CooldownManager = require(`${process.cwd()}/cooldown.js`);
-
-const embeds = {
-    commandDoesntExistError: function (message) {return {embed:{
-        title: "Command doesn't exist.",
-        color: 0xff0000,
-        description: `That command does not exist. Do \`${config.prefix}help\` for help.`,
-        footer: {
-            text: `${message.author.username}`,
-            icon_url: `${message.author.avatarURL}`
-        },
-        timestamp: Date.now()
-    }}},
-    errorOccured: function (message, error) {
-        return {embed:{
-            title: "An error occured.",
-            color: 0xff0000,
-            description: `An unknown error occured.`,
-            fields: [{
-                name: "Error details",
-                value: `\`\`\`${error}\`\`\``
-            }],
-            footer: {
-                text: `${message.author.username}`,
-                icon_url: `${message.author.avatarURL}`
-            },
-            timestamp: Date.now()
-        }}
-    },
-    noPermissionEmbed: function (message) {
-        return {embed: {
-            title: ":x: You don't have permission to do that!",
-            color: 0xff0000,
-            footer: {
-                text: `${message.author.username}`,
-                icon_url: `${message.author.avatarURL}`
-            }
-        }}
-    },
-    cooldown: function (cooldown, command) {
-        return {embed: {
-            title: ":clock: That command is on cooldown, please hold on.",
-            description: `Please wait ${Math.ceil(cooldown/1000)}s to use ${command}.`,
-            color: 0xffec15,
-        }}
-    }
-}
 
 class CommandHandler {
     constructor () {
@@ -102,7 +55,7 @@ class CommandHandler {
         }
         else {
             const cooldownLeft = this.cooldownManager.checkTimeLeft(message.author);
-            const msg = await message.channel.send(embeds.cooldown(cooldownLeft, what));
+            const msg = await message.channel.send(embeds.cooldown(message, cooldownLeft, what));
             client.setTimeout(()=>{msg.delete()}, cooldownLeft);
         }
     }
@@ -115,7 +68,7 @@ class CommandHandler {
                         this.go(what, client, message, args);
                     }
                     else {
-                        message.channel.send(embeds.noPermissionEmbed(message));
+                        message.channel.send(embeds.noPermissionEmbed(message, what, this.commands.get(what).restriction));
                     }
                 }
                 else {
@@ -123,7 +76,7 @@ class CommandHandler {
                 }
             }
             else {
-                message.channel.send(embeds.commandDoesntExistError(message));
+                message.channel.send(embeds.commandDoesntExistError(message, what));
             }
         }
         catch (err) {

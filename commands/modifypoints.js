@@ -1,4 +1,4 @@
-const embeds = {
+/* const embeds = {
     provideInput: function (message, thing, help) {
         return {embed: {
             title: `Please provide ${thing} to modify`,
@@ -63,7 +63,7 @@ const embeds = {
         }}
     }
 
-}
+} */
 module.exports.run = function (client, message, args) {
     const pool = require(`${process.cwd()}/db/connection.js`).pool;
     pool.getConnection(function(err, connection) {
@@ -71,16 +71,16 @@ module.exports.run = function (client, message, args) {
         let id;
         //args 0: operation, args 1: userid, args 2: amount, args 3: reason
         if (args.length < 1) {
-            message.channel.send(embeds.tellMeWhatToDo(message));
+            message.channel.send(embeds.invalidOrEmptyInput(message, "no arguments", "four arguments", "Argument order: OPERATION USERID AMOUNT REASON"));
             return false;
         }
         if (args.length < 2) {
-            message.channel.send(embeds.provideInput(message, "somebody", "Mention or provide an ID"));
+            message.channel.send(embeds.invalidOrEmptyInput(message, "no user id", "an user id", "Mention or provide an ID"));
             return false;
         }
         let pointsOffset = args[2];
         if (/\D/gi.test(pointsOffset)) {
-            message.channel.send(embeds.invaildInput(message));
+            message.channel.send(embeds.invalidOrEmptyInput(message, "an invalid amount", "an amount", "Try again, this is likely a typo. The amount should be a number ONLY."));
             return;
         }
         pointsOffset = parseInt(pointsOffset)
@@ -97,7 +97,7 @@ module.exports.run = function (client, message, args) {
             }
         }
         if (id === undefined) {
-            message.channel.send(embeds.invaildIDOrMention(message));
+            message.channel.send(embeds.invaildOrEmptyInput(message, "an invalid user", "a user", "Perhaps the user has left the guild, or you provided a wrong ID."));
             return false;
         }
         //returns whether user exists
@@ -129,7 +129,7 @@ module.exports.run = function (client, message, args) {
                 const historyToInsert = JSON.stringify(currentHistoryParsed)
                 connection.query(`UPDATE user SET points=?, history=? WHERE userid=${connection.escape(id)}`, [toWhat, historyToInsert], (err, res)=>{
                     if (err) {message.channel.send(embeds.errorOccured(message, err)); return}
-                    message.channel.send(embeds.addPointsOk(message, toWhat, reason));
+                    message.channel.send(embeds.addPointsOk(message, id, toWhat, reason));
                     connection.release();
                 })
             });
@@ -153,15 +153,15 @@ module.exports.run = function (client, message, args) {
             case "add":
             case "a":
                 if (args.length < 3) {
-                    message.channel.send(embeds.providePointBalance(message, "add"));
+                    message.channel.send(embeds.invalidOrEmptyInput(message, "no amount to add", "an amount to add", "Provide an amount to add."));
                     return;
                 }
                 if (args.length < 4) {
-                    message.channel.send(embeds.provideInput(message, "a reason", "Provide a reason for modifying the points"));
+                    message.channel.send(embeds.invalidOrEmptyInput(message, "no reason", "a reason for modifying the points", "Provide a reason for modifying the points"));
                     return false;
                 }
                 checkIfUserExists((doesExist)=>{
-                    if (!doesExist) {message.channel.send(embeds.userDoesntHaveColumn(message));}
+                    if (!doesExist) {message.channel.send(embeds.userDoesntHaveColumn(message, id));}
                     
                     else {
                         //I don't know why, but it says balanceNow is redefined, even through the breaks; are working. Don't fix
@@ -178,15 +178,15 @@ module.exports.run = function (client, message, args) {
             case "remove": 
 
                 if (args.length < 3) {
-                    message.channel.send(embeds.providePointBalance(message, "remove"));
+                    message.channel.send(embeds.invalidOrEmptyInput(message, "no amount", "an amount", "Provide an amount."));
                     return;
                 }
                 if (args.length < 4) {
-                    message.channel.send(embeds.provideInput(message, "a reason", "Provide a reason for modifying the points"));
+                    message.channel.send(embeds.invalidOrEmptyInput(message, "no reason", "a reason", "Provide a reason for modifying the points"));
                     return false;
                 }
                 checkIfUserExists((doesExist)=>{
-                    if (!doesExist) {message.channel.send(embeds.userDoesntHaveColumn(message));}
+                    if (!doesExist) {message.channel.send(embeds.userDoesntHaveColumn(message, id));}
                     
                     else {
                         getCurrentPoints((balanceNow)=>{
@@ -201,13 +201,13 @@ module.exports.run = function (client, message, args) {
             case "import":
             case "i":
                 if (args.length < 3) {
-                    message.channel.send(embeds.providePointBalance(message, "set the point balance to"));
+                    message.channel.send(embeds.invalidOrEmptyInput(message, "no amount", "an amount to import the points as", "Provide an amount to set the point balance to"));
                     return;
                 }
 
                 checkIfUserExists((doesExist)=> {
                     if (doesExist) {                    
-                        message.channel.send(embeds.userAlreadyHasColumn(message));
+                        message.channel.send(embeds.userAlreadyHasColumn(message, id));
                         connection.release();
                         return;
                     }
@@ -232,7 +232,7 @@ module.exports.run = function (client, message, args) {
                     })
                 }) */
             default:
-                message.channel.send(embeds.tellMeWhatToDo(message));
+                message.channel.send(embeds.invalidOrEmptyInput(message, "no operation", "an operation", "Operations: import, add or remove"));
             break;
         } 
     });
