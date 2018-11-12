@@ -10,7 +10,7 @@ To set this bot up:
 
 ### 1. Clone the repository
 
-Download Git [Github Help](https://help.github.com/articles/set-up-git/).
+Download [Git](https://help.github.com/articles/set-up-git/).
 You will also need [MySQL](https://dev.mysql.com/downloads/mysql/) installed on your server or computer.
 Then, clone the repository:
 
@@ -27,12 +27,12 @@ This is the structure of the file:
 
 ```json
     {
-    "db": {
-        "username": "",
-        "password": ""
-    },
-    "token": ""
-}
+        "db": {
+            "username": "",
+            "password": ""
+        },
+        "token": ""
+    }
 ```
 
 Simply fill it in with your details. You can get a token at Discord's Developer portal. Click Add Application.

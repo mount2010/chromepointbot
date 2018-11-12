@@ -9,14 +9,14 @@ class CommandHandler {
     registerCommand (commandFileLink) {
         const command = require(`${process.cwd()}/${commandFileLink}`);
         if (command.info === undefined) {console.log(`${commandFileLink} has no info value, will skip`); return;}
-        if (command.info.name === undefined) {console.log(`${commandFileLink} has no name, will skip`)}
+        if (command.info.name === undefined) {console.log(`${commandFileLink} has no name, will skip`);}
         if (Array.isArray(command.info.name)) {
             for (let i = 0; i < command.info.name.length; i++) {
                 if (!this.commands.has(command.info.name[i])) {
                     this.commands.set(command.info.name[i], command);
                     this.cooldownManager.register(command.info.name[i], command.info.cooldown);
                 }
-                else {console.log(`Duplicate alias/name for ${commandFileLink} "${command.info.name[i]}" `)}
+                else {console.log(`Duplicate alias/name for ${commandFileLink} "${command.info.name[i]}" `);}
             }
         }
         else {
@@ -41,7 +41,7 @@ class CommandHandler {
                 }
                 else {infos.push(value.info);}
             }
-        })
+        });
         return infos;
     }
     getInfoFor (command) {
@@ -56,7 +56,7 @@ class CommandHandler {
         else {
             const cooldownLeft = this.cooldownManager.checkTimeLeft(message.author);
             const msg = await message.channel.send(embeds.cooldown(message, cooldownLeft, what));
-            client.setTimeout(()=>{msg.delete()}, cooldownLeft);
+            client.setTimeout(()=>{msg.delete();}, cooldownLeft);
         }
     }
     run (what, client, message, args) {

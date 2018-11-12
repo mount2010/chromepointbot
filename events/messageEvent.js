@@ -24,8 +24,8 @@ function message (message) {
 module.exports.register = function (bot) {
     bot.on('message', message);
     registered = bot;
-}
+};
 
 module.exports.handler = function (newHandler) {
     handler = newHandler;
-}
+};

@@ -19,7 +19,7 @@ module.exports.run = async function (client, message, args) {
                         username = member.user.username;
                     }).catch(()=>{
                         username = args[0];
-                    })
+                    });
                 }
                 whosePoints = args[0];
             }
@@ -32,7 +32,7 @@ module.exports.run = async function (client, message, args) {
 
     function parseHistory (historyJSON) {
         const history = JSON.parse(historyJSON);
-        if (history[0] === undefined) {return undefined}
+        if (history[0] === undefined) {return undefined;}
         const pages = [];
         const numPages = Math.ceil(history.length/10);
         const remaindingFields = Math.floor(history.length % 10);
@@ -44,7 +44,7 @@ module.exports.run = async function (client, message, args) {
                 page.push({
                     name: `[ID ${k}] ${history[k].amount} on ${history[k].date? history[k].date:"Unrecorded date"}`,
                     value: `for ${history[k].reason}`
-                })
+                });
             }   
             pages.push(page);
         }
@@ -83,12 +83,12 @@ module.exports.run = async function (client, message, args) {
         }
         reactHeard (collected) {
             if (collected.has('⬅')) {
-                if (this.page - 1 < 0) {this.listenReactions(true); return}
+                if (this.page - 1 < 0) {this.listenReactions(true); return;}
                 this.page -= 1; 
                 this.changePage();
             }
             else if (collected.has('➡')) {
-                if (this.page + 1 > this.amountOfPages) {this.listenReactions(true); return}
+                if (this.page + 1 > this.amountOfPages) {this.listenReactions(true); return;}
                 this.page += 1; 
                 this.changePage();
             }
@@ -104,7 +104,7 @@ module.exports.run = async function (client, message, args) {
             const embed = embeds.pointsEmbed(message, history, this.page+1, this.pagedHistory.length, whosePoints,  this.result[0].points, whosePoints == message.author.id);
 
             if (!this.hasSent) {this.sentMsg = await message.channel.send(embed); this.hasSent = true;}
-            else {this.sentMsg = await this.sentMsg.edit(embed)}
+            else {this.sentMsg = await this.sentMsg.edit(embed);}
             
             await this.sentMsg.react('⬅');
             await this.sentMsg.react('❌');
@@ -117,9 +117,9 @@ module.exports.run = async function (client, message, args) {
     
     try {
     pool.getConnection(function (error, connection) {
-        if (error) {throw error}
+        if (error) {throw error;}
         connection.query(`SELECT * FROM user WHERE userid=${connection.escape(whosePoints)}`, function (error, result) {
-            if (error) {throw error}
+            if (error) {throw error;}
             if (result.length === 0) {
                 message.channel.send(`${whosePoints==message.author.id?'Your':'Their'} entry doesn't exist in the DB`);
                 return;
@@ -130,7 +130,7 @@ module.exports.run = async function (client, message, args) {
                 paginator.changePage(0);
                 connection.release();
             }
-        })
+        });
     });
     }
     catch (err) {
@@ -145,4 +145,4 @@ module.exports.info = {
     arguments: [
         ["User", "The user's points to view"]
     ]
-}
+};

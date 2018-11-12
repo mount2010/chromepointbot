@@ -35,16 +35,16 @@ module.exports.run = function (client, message, args) {
         //returns whether user exists
         function checkIfUserExists (callback) { 
             connection.query(`SELECT * FROM user WHERE userid=${connection.escape(id)}`, (err, res)=>{
-                if (err) {message.channel.send(embeds.errorOccured(message, err)); return}
+                if (err) {message.channel.send(embeds.errorOccured(message, err)); return;}
                 callback(res[0] !== undefined); 
             });
         }
 
         function getCurrentHistory (callback) {
             connection.query(`SELECT history FROM user WHERE userid=${connection.escape(id)}`, (err, res) => {
-                if (err) {message.channel.send(embeds.errorOccured(message, err)); return}
+                if (err) {message.channel.send(embeds.errorOccured(message, err)); return;}
                 callback(res[0]);
-            })
+            });
         }
         switch (operation) { 
             case "add":
@@ -59,7 +59,7 @@ module.exports.run = function (client, message, args) {
                     const reason = message.content.slice(message.content.indexOf(args[4]));
 
                     if (!(amount.startsWith("+") || amount.startsWith("-"))) {
-                        message.channel.send(embeds.invaildOrEmptyInput(message, "an invalid amount", "an amount that begins with + or -", "Try again."))
+                        message.channel.send(embeds.invaildOrEmptyInput(message, "an invalid amount", "an amount that begins with + or -", "Try again."));
                         return;
                     }
 
@@ -84,15 +84,15 @@ module.exports.run = function (client, message, args) {
                             const insertHistory = JSON.stringify(newHistory);
                             
                             connection.query(`UPDATE user SET history=${connection.escape(insertHistory)} WHERE userid=${connection.escape(id)}`, (err, res)=>{
-                                if (err) {message.channel.send(embeds.errorOccured(message, err)); return}
+                                if (err) {message.channel.send(embeds.errorOccured(message, err)); return;}
                                 message.channel.send(embeds.changeHistoryOk(message, JSON.stringify(history), "Added"));
                                 connection.release();
-                            })
+                            });
                             //modifyHistory(JSON.stringify(currentHistory), "Added");
         
 
-                        })
-                    })
+                        });
+                    });
                 }
                 catch (err) {
                     console.log(err);
@@ -134,17 +134,17 @@ module.exports.run = function (client, message, args) {
                                     const insertHistory = JSON.stringify(historyToRemoveFrom);
 
                                     connection.query(`UPDATE user SET history=${connection.escape(insertHistory)} WHERE userid=${connection.escape(id)}`, (err, res)=>{
-                                        if (err) {throw err}
+                                        if (err) {throw err;}
                                         else {
                                             message.channel.send(embeds.changeHistoryOk(message, historyToRemove, `Removed id ${args[2]}, `));
                                             connection.release();
                                             return;
                                         }
-                                    })
+                                    });
                                 }
                             }
-                        })
-                    })
+                        });
+                    });
                 }
                 catch (err) {
                     message.channel.send(embeds.errorOccured(message, err));
@@ -156,7 +156,7 @@ module.exports.run = function (client, message, args) {
         }
     });
 
-}
+};
 
 module.exports.info = {
     name: ["modifyhistory", "mh"], 
@@ -170,11 +170,11 @@ module.exports.info = {
         ["Date", "The date this history should be set to"],
         ["Reason", "The reason this history should be set to"]
     ]
-}
+};
 
 
 module.exports.permission = function (message) {
     const config = require(`${process.cwd()}/config.json`);
-    if (config.admins.includes(message.author.id)) {return true}
-    else {return false}
-}
+    if (config.admins.includes(message.author.id)) {return true;}
+    else {return false;}
+};

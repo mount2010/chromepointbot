@@ -67,7 +67,7 @@
 module.exports.run = function (client, message, args) {
     const pool = require(`${process.cwd()}/db/connection.js`).pool;
     pool.getConnection(function(err, connection) {
-        if (err) {message.channel.send(embeds.errorOccured(message, err))}
+        if (err) {message.channel.send(embeds.errorOccured(message, err));}
         let id;
         //args 0: operation, args 1: userid, args 2: amount, args 3: reason
         if (args.length < 1) {
@@ -83,7 +83,7 @@ module.exports.run = function (client, message, args) {
             message.channel.send(embeds.invalidOrEmptyInput(message, "an invalid amount", "an amount", "Try again, this is likely a typo. The amount should be a number ONLY."));
             return;
         }
-        pointsOffset = parseInt(pointsOffset)
+        pointsOffset = parseInt(pointsOffset);
 
 
         let reason = message.content.slice(message.content.indexOf(args[3]));
@@ -103,35 +103,35 @@ module.exports.run = function (client, message, args) {
         //returns whether user exists
         function checkIfUserExists (callback) { 
             connection.query(`SELECT * FROM user WHERE userid=${connection.escape(id)}`, (err, res)=>{
-                if (err) {message.channel.send(embeds.errorOccured(message, err))}
+                if (err) {message.channel.send(embeds.errorOccured(message, err));}
                 callback(res[0] !== undefined); 
             });
         }
         //TODO: make this a callback to fix the undefined10 problem
         function getCurrentPoints (callback) {
             connection.query(`SELECT points FROM user WHERE userid=${connection.escape(id)}`, (err, res)=>{
-                if (err) {throw err}
+                if (err) {throw err;}
                 const currentBalance = res[0].points;
                 callback(currentBalance);
             });
         }
         function getCurrentHistory (callback) {
             connection.query(`SELECT history FROM user WHERE userid=${connection.escape(id)}`, (err, res) => {
-                if (err) {message.channel.send(embeds.errorOccured(message, err)); return}
+                if (err) {message.channel.send(embeds.errorOccured(message, err)); return;}
                 callback(res[0]);
-            })
+            });
         }
         function modifyPoints (toWhat, why, amount) {
             getCurrentHistory((currentHistory)=>{
                 const currentHistoryParsed = JSON.parse(currentHistory.history);
                 const date = new Date();
                 currentHistoryParsed.push({date: `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`, reason: why, amount: amount});
-                const historyToInsert = JSON.stringify(currentHistoryParsed)
+                const historyToInsert = JSON.stringify(currentHistoryParsed);
                 connection.query(`UPDATE user SET points=?, history=? WHERE userid=${connection.escape(id)}`, [toWhat, historyToInsert], (err, res)=>{
-                    if (err) {message.channel.send(embeds.errorOccured(message, err)); return}
+                    if (err) {message.channel.send(embeds.errorOccured(message, err)); return;}
                     message.channel.send(embeds.addPointsOk(message, id, toWhat, reason));
                     connection.release();
-                })
+                });
             });
         }
 
@@ -170,9 +170,9 @@ module.exports.run = function (client, message, args) {
                             const newBalance = balanceNow + pointsOffset;
                             
                             modifyPoints(newBalance, reason, `+${pointsOffset}`);
-                        })
+                        });
                     }
-                })
+                });
             break;
             case "r":
             case "remove": 
@@ -194,9 +194,9 @@ module.exports.run = function (client, message, args) {
                             const newBalance = balanceNow - pointsOffset;
                             
                             modifyPoints(newBalance, reason, `-${pointsOffset}`);
-                        })
+                        });
                     }
-                })
+                });
             break;
             case "import":
             case "i":
@@ -216,7 +216,7 @@ module.exports.run = function (client, message, args) {
                         if (err) {message.channel.send(embeds.errorOccured(message, err)); return;}
                         message.channel.send(`:ok_hand: \`\`\`json\n${JSON.stringify(res)}\`\`\``);
                     });
-                })
+                });
             break;
 /*             case "reset":
                 message.channel.send(`Are you sure you want to reset the points (and history) of ${id}?`).then((msg)=>{
@@ -237,7 +237,7 @@ module.exports.run = function (client, message, args) {
         } 
     });
     return;
-}
+};
 
 module.exports.info = {
     name: ["modify", "modifypoints", "m"],
@@ -250,11 +250,11 @@ module.exports.info = {
         ["Amount", "The amount to add or remove"],
         ["Reason", "The reason for this operation"]
     ]
-}
+};
 
 
 module.exports.permission = function (message) {
     const config = require(`${process.cwd()}/config.json`);
-    if (config.admins.includes(message.author.id)) {return true}
-    else {return false}
-}
+    if (config.admins.includes(message.author.id)) {return true;}
+    else {return false;}
+};

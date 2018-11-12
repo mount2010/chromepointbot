@@ -1,6 +1,8 @@
 module.exports.run = function (client, message, args) {
-    message.channel.send("Result: \n"+eval(args.join(' ')));
-}
+    //jshint evil:true
+    //Developer only, it's fine. (Unless the trusted user breaks it...)
+    message.channel.send("Result: \n"+eval(args.join(' '))); 
+};
 
 module.exports.info = {
     name: ["eval"],
@@ -10,11 +12,11 @@ module.exports.info = {
     arguments: [
         ["Code", "JS to be evalulated"]
     ]
-}
+};
 
 
 module.exports.permission = function (message) {
     const config = require(`${process.cwd()}/config.json`);
-    if (config.admins.includes(message.author.id)) {return true}
-    else {return false}
-}
+    if (config.developer.id.includes(message.author.id)) {return true;}
+    else {return false;}
+};

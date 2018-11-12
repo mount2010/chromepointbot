@@ -8,21 +8,21 @@ const pool = mysql.createPool({
     user: secrets.db.username,
     password: secrets.db.password,
     database: config.db.database
-})
+});
 
 function doQuery (query) {
     const promise = new Promise(function (resolve, reject) {
         pool.getConnection(function (err, connection) {
-            if (err) {reject(err)}
+            if (err) {reject(err);}
             connection.query(query, function (error, results, fields) {
                 connection.release();
-                if (error) {reject(error)}
+                if (error) {reject(error);}
             
                 else {
                     resolve(results);
-                };
-            })
-        })
+                }
+            });
+        });
     });
     return promise;
 

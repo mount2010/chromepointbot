@@ -119,4 +119,4 @@ global.embeds = {
     commandDoesntExistError: function (message, command) {
         return emojiEmbedBase(message, `${command} does not exist`, ":x:", false).setDescription(`Do ${config.prefix}help for help.`);
     } 
-}
+};
