@@ -60,7 +60,7 @@ global.embeds = {
      * @argument {string} history The JSON stringified object of the history that was modified
      * @argument {string} action The modification action that was carried out
      */
-    changeHistoryOK: function (message, history, action) {
+    changeHistoryOk: function (message, history, action) {
         return emojiEmbedBase(message, `Success`, ":ok_hand:", true).setDescription(`${action} \`${history}\` successfully`);
     },
     /**
