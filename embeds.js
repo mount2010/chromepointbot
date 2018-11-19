@@ -15,7 +15,7 @@ function emojiEmbedBase (message, title, emoji, isSuccess) {
     return embed;
 }
 
-global.embeds = {
+module.exports.embeds = {
     /**
      * Embed for the $points command to show the information needed
      * (Gee, the amount of arguments. Pop a PR if you know what I need here!)
@@ -80,12 +80,12 @@ global.embeds = {
      * @argument {Discord.message} message The Discord message this command was ran with
      * @argument {string} name The command being queried
      * @argument {string} help The help for this command
-     * @argument {object[]} arguments Fields for the arguments
+     * @argument {object[]} argumentsHelp Fields for the arguments
      */
-    commandHelpEmbed: function (message, name, help, arguments) {
+    commandHelpEmbed: function (message, name, help, argumentsHelp) {
         const embed = emojiEmbedBase(message, `Help for ${name}`, ":information_source:", true)
         .setDescription(`${help}\n**Arguments**:`);
-        embed.fields = arguments;
+        embed.fields = argumentsHelp;
         return embed;
     },
     /**Embed for when a command is not found

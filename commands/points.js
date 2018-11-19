@@ -1,6 +1,5 @@
 module.exports.run = async function (client, message, args) {
     const pool = require(`${process.cwd()}/db/connection.js`).pool;
-    const config = require(`${process.cwd()}/config.json`);
     let whosePoints;
     let username;
     if (args.length < 1) {
@@ -57,9 +56,9 @@ module.exports.run = async function (client, message, args) {
             this.result = result;
             this.amountOfPages = this.pagedHistory.length - 1 || 0;
             this.page = 0;
-            this.hasSent;
-            this.sentMsg;
-            this.queryTimeout;
+            this.hasSent = false;
+            this.sentMsg = {};
+            this.queryTimeout = undefined;
         }
         async listenReactions (isARepeat = false) {
             try {
@@ -107,7 +106,7 @@ module.exports.run = async function (client, message, args) {
             else {this.sentMsg = await this.sentMsg.edit(embed);}
             
             await this.sentMsg.react('⬅');
-            await this.sentMsg.react('❌');
+            await this.sentMsg.react('❌'); 
             await this.sentMsg.react('➡');
             this.listenReactions();
         }

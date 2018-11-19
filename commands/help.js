@@ -32,18 +32,18 @@ module.exports.run = function (client, message, args) {
             message.channel.send(embeds.commandNotFoundEmbed(message, args[0]));
         }
         else {
-            let arguments = [];
+            let argumentsHelp = [];
             if (help.arguments) {
                  help.arguments.forEach(
                      (el)=>{
-                         arguments.push({name: el[0], value: el[1]});
+                         argumentsHelp.push({name: el[0], value: el[1]});
                     }
                 );
             }
             else {
-                 arguments.push([{name: "No arguments", value: "This command has no arguments"}]);
+                 argumentsHelp.push([{name: "No arguments", value: "This command has no arguments"}]);
             }
-            message.channel.send(embeds.commandHelpEmbed(message, help.name, help.help, arguments));
+            message.channel.send(embeds.commandHelpEmbed(message, help.name, help.help, argumentsHelp));
         }
     }    
 };

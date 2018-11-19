@@ -76,7 +76,6 @@ module.exports.run = function (client, message, args) {
                         }
                         getCurrentHistory((currentHistory)=>{
                             const history = {date, reason, amount};
-                            let historyCurrentIdToInsert;
                             let newHistory = JSON.parse(currentHistory.history);
 
                             newHistory.push(history);

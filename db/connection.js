@@ -25,7 +25,5 @@ function doQuery (query) {
         });
     });
     return promise;
-
-
 }
 module.exports = {doQuery, pool};
