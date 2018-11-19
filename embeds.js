@@ -66,7 +66,7 @@ module.exports.embeds = {
     /**
      * Embed for listing all the commands for the bot
      * 
-     * @argument {Discord.message} message The DIscord message this command was ran with
+     * @argument {Discord.message} message The Discord message this command was ran with
      * @argument {string[]} fields The fields for the embed
      */
     allCommandsEmbed: function (message, fields) {

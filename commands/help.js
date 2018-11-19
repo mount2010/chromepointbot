@@ -1,6 +1,5 @@
 module.exports.run = function (client, message, args) {
     const handler = require(`${process.cwd()}/bot.js`).handler;
-
     function makeAliasNameSting (arr) {
         let str = '';
         str+=arr[0];
@@ -23,7 +22,6 @@ module.exports.run = function (client, message, args) {
                 value: (commands[i].help === undefined?"No help specified":commands[i].help)+(commands[i].restriction !== undefined?` **${commands[i].restriction}**`:''),
             });
         }
-
         message.channel.send(embeds.allCommandsEmbed(message, fields));
     }
     else {

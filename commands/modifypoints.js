@@ -34,40 +34,6 @@ module.exports.run = function (client, message, args) {
             message.channel.send(embeds.invaildOrEmptyInput(message, "an invalid user", "a user", "Perhaps the user has left the guild, or you provided a wrong ID."));
             return false;
         }
-        //returns whether user exists
-        function checkIfUserExists (callback) { 
-            connection.query(`SELECT * FROM user WHERE userid=${connection.escape(id)}`, (err, res)=>{
-                if (err) {message.channel.send(embeds.errorOccured(message, err));}
-                callback(res[0] !== undefined); 
-            });
-        }
-        //TODO: make this a callback to fix the undefined10 problem
-        function getCurrentPoints (callback) {
-            connection.query(`SELECT points FROM user WHERE userid=${connection.escape(id)}`, (err, res)=>{
-                if (err) {throw err;}
-                const currentBalance = res[0].points;
-                callback(currentBalance);
-            });
-        }
-        function getCurrentHistory (callback) {
-            connection.query(`SELECT history FROM user WHERE userid=${connection.escape(id)}`, (err, res) => {
-                if (err) {message.channel.send(embeds.errorOccured(message, err)); return;}
-                callback(res[0]);
-            });
-        }
-        function modifyPoints (toWhat, why, amount) {
-            getCurrentHistory((currentHistory)=>{
-                const currentHistoryParsed = JSON.parse(currentHistory.history);
-                const date = new Date();
-                currentHistoryParsed.push({date: `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`, reason: why, amount: amount});
-                const historyToInsert = JSON.stringify(currentHistoryParsed);
-                connection.query(`UPDATE user SET points=?, history=? WHERE userid=${connection.escape(id)}`, [toWhat, historyToInsert], (err, res)=>{
-                    if (err) {message.channel.send(embeds.errorOccured(message, err)); return;}
-                    message.channel.send(embeds.addPointsOk(message, id, toWhat, reason));
-                    connection.release();
-                });
-            });
-        }
 
         switch (args[0]) {
 /*             case "set":
@@ -169,6 +135,40 @@ module.exports.run = function (client, message, args) {
                 message.channel.send(embeds.invalidOrEmptyInput(message, "no operation", "an operation", "Operations: import, add or remove"));
             break;
         } 
+        //returns whether user exists
+        function checkIfUserExists (callback) { 
+            connection.query(`SELECT * FROM user WHERE userid=${connection.escape(id)}`, (err, res)=>{
+                if (err) {message.channel.send(embeds.errorOccured(message, err));}
+                callback(res[0] !== undefined); 
+            });
+        }
+        //TODO: make this a callback to fix the undefined10 problem
+        function getCurrentPoints (callback) {
+            connection.query(`SELECT points FROM user WHERE userid=${connection.escape(id)}`, (err, res)=>{
+                if (err) {throw err;}
+                const currentBalance = res[0].points;
+                callback(currentBalance);
+            });
+        }
+        function getCurrentHistory (callback) {
+            connection.query(`SELECT history FROM user WHERE userid=${connection.escape(id)}`, (err, res) => {
+                if (err) {message.channel.send(embeds.errorOccured(message, err)); return;}
+                callback(res[0]);
+            });
+        }
+        function modifyPoints (toWhat, why, amount) {
+            getCurrentHistory((currentHistory)=>{
+                const currentHistoryParsed = JSON.parse(currentHistory.history);
+                const date = new Date();
+                currentHistoryParsed.push({date: `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`, reason: why, amount: amount});
+                const historyToInsert = JSON.stringify(currentHistoryParsed);
+                connection.query(`UPDATE user SET points=?, history=? WHERE userid=${connection.escape(id)}`, [toWhat, historyToInsert], (err, res)=>{
+                    if (err) {message.channel.send(embeds.errorOccured(message, err)); return;}
+                    message.channel.send(embeds.addPointsOk(message, id, toWhat, reason));
+                    connection.release();
+                });
+            });
+        }        
     });
     return;
 };

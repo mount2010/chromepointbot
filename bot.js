@@ -1,5 +1,5 @@
 const discord = require('discord.js');
-global.embeds = require(`${process.cwd()}/embeds.js`);
+global.embeds = require(`${process.cwd()}/embeds.js`).embeds;
 const config = require(`${process.cwd()}/config.json`);
 const secrets = require(`${process.cwd()}/secrets.json`);
 const messageEvent = require(`${process.cwd()}/events/messageEvent.js`);
