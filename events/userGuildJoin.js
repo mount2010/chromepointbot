@@ -2,18 +2,6 @@ const config = require(`${process.cwd()}/config.json`);
 const day = new Date();
 const defHistory = [{amount: `+${config.joinPoints}`, reason: 'Free 100 Points for Joining', date: `${day.getDate()}/${day.getMonth()+1}/${day.getFullYear()}` }];
 const defaultHistory = JSON.stringify(defHistory);
-const embeds = {
-    guildMemberAdd: function (user) {
-        return {embed: {
-            title: `Welcome to the server, ${user.user.username}`,
-            description: `Your points account has been created with ${config.joinPoints} starting points. \n For more information, check my help: ${config.prefix}help.`,
-            image: {
-                url: user.user.avatarURL
-            },
-            timestamp: new Date()
-        }};
-    }
-};
 let registered;
 
 module.exports.register = ((bot)=>{
