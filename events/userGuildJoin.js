@@ -1,6 +1,6 @@
 const config = require(`${process.cwd()}/config.json`);
 const day = new Date();
-const defHistory = [{amount: `+${config.joinPoints}`, reason: 'Free 100 Points for Joining', date: `${day.getDate() + '/'+ (day.getMonth()+1) + '/'+day.getFullYear()}` }];
+const defHistory = [{amount: `+${config.joinPoints}`, reason: 'Free 100 Points for Joining', date: `${day.getDate()}/${day.getMonth()+1}/${day.getFullYear()}` }];
 const defaultHistory = JSON.stringify(defHistory);
 const embeds = {
     guildMemberAdd: function (user) {
@@ -26,7 +26,7 @@ module.exports.register = ((bot)=>{
                     member.send(`Welcome back, ${member.user.username}, your points are still at ${res[0].points}.`);
                 }
                 else {
-                    connection.query(`INSERT INTO user (userid, points, history) VALUES (${member.id}, '${config.joinPoints}', '${connection.escape(defaultHistory)}')`, (error, res)=>{
+                    connection.query(`INSERT INTO user (userid, points, history) VALUES ('${member.id}', ${config.joinPoints}, '${defaultHistory}')`, (error, res)=>{
                         if (error) {member.send(`Something went wrong with initializing your points account, please ask an admin to import your account: ${error}`);}
                         else {member.send(embeds.guildMemberAdd(member));}
                         console.log(`User ${member.user.username} joined, userid ${member.id}, DB ${JSON.stringify(res)}`);
