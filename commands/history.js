@@ -108,12 +108,12 @@ module.exports.run = function (client, message, args) {
             const reason = message.content.slice(message.content.indexOf(args[4]));
 
             if (!(amount.startsWith("+") || amount.startsWith("-"))) {
-                message.channel.send(embeds.invaildOrEmptyInput(message, "an invalid amount", "an amount that begins with + or -", "Try again."));
+                message.channel.send(embeds.invalidOrEmptyInput(message, "an invalid amount", "an amount that begins with + or -", "Try again."));
                 return;
             }
 
             if (!reason || !amount || !date) {
-                message.channel.send(embeds.invaildOrEmptyInput(message, "a not valid argument", "arguments in the order: $modifyhistory OPERATION USERID AMOUNT DATE HISTORY", "Try again."));
+                message.channel.send(embeds.invalidOrEmptyInput(message, "a not valid argument", "arguments in the order: $modifyhistory OPERATION USERID AMOUNT DATE HISTORY", "Try again."));
                 connection.release();
                 return;
             }
