@@ -180,7 +180,6 @@ module.exports.info = {
     ]
 };
 
-
 module.exports.permission = function (message) {
     const config = require(`${process.cwd()}/config.json`);
     if (config.admins.includes(message.author.id)) {return true;}

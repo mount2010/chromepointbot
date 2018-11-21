@@ -16,10 +16,11 @@ module.exports.run = function (client, message, args) {
         const fields = [];
 
         for (let i = 0; i < commands.length; i++) {
-            if (commands[i].nohelp || commands[i].restriction) {continue;}
+            if (commands[i].info.nohelp) {continue;}
+            if (commands[i].permission && !commands[i].permission(message)) {continue;}
             fields.push({
-                name: (Array.isArray(commands[i].name)?`${makeAliasNameSting(commands[i].name)}`:commands[i].name), 
-                value: (commands[i].help === undefined?"No help specified":commands[i].help)+(commands[i].restriction !== undefined?` **${commands[i].restriction}**`:''),
+                name: (Array.isArray(commands[i].info.name)?`${makeAliasNameSting(commands[i].info.name)}`:commands[i].info.name), 
+                value: (commands[i].info.help === undefined?"No help specified":commands[i].info.help)+(commands[i].info.restriction !== undefined?` **${commands[i].info.restriction}**`:''),
             });
         }
         message.channel.send(embeds.allCommandsEmbed(message, fields));

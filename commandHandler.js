@@ -37,9 +37,9 @@ class CommandHandler {
             if (!keysToIgnore.includes(key)) {
                 if (Array.isArray(value.info.name)) {
                     keysToIgnore.push(...value.info.name);
-                    infos.push(value.info);
+                    infos.push(value);
                 }
-                else {infos.push(value.info);}
+                else {infos.push(value);}
             }
         });
         return infos;
