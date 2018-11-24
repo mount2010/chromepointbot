@@ -21,6 +21,7 @@ module.exports.run = function (client, message, args) {
             fields.push({
                 name: (Array.isArray(commands[i].info.name)?`${makeAliasNameSting(commands[i].info.name)}`:commands[i].info.name), 
                 value: (commands[i].info.help === undefined?"No help specified":commands[i].info.help)+(commands[i].info.restriction !== undefined?` **${commands[i].info.restriction}**`:''),
+                inline: true
             });
         }
         message.channel.send(embeds.allCommandsEmbed(message, fields));

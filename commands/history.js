@@ -104,12 +104,17 @@ module.exports.run = function (client, message, args) {
         }
         try {
             const amount = args[2];
-            const date = args[3];
+            let date = args[3];
             const reason = message.content.slice(message.content.indexOf(args[4]));
 
             if (!(amount.startsWith("+") || amount.startsWith("-"))) {
                 message.channel.send(embeds.invalidOrEmptyInput(message, "an invalid amount", "an amount that begins with + or -", "Try again."));
                 return;
+            }
+
+            if (date.match("^today$", "i")) {
+                const day = new Date();
+                date = `${day.getDate()}/${day.getMonth()+1}/${day.getFullYear()}`;
             }
 
             if (!reason || !amount || !date) {
@@ -174,8 +179,8 @@ module.exports.info = {
     arguments: [
         ["Operation", "The operation to perform on the user's history. May be \`add\` or \`remove\` or \`import\`"], 
         ["Userid", "The user's userid or a mention to the user"],
-        ["Amount", "The amount of points to modify with"],
-        ["Date", "The date this history should be set to"],
+        ["Amount", "The amount of points to modify with."],
+        ["Date", "The date this history should be set to. Can also be \`today\` to set it to the current date"],
         ["Reason", "The reason this history should be set to"]
     ]
 };

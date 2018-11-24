@@ -1,7 +1,5 @@
 # Chrome Point Bot
 
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/mount2010/chromepointbot.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/mount2010/chromepointbot/context:javascript)
-
 This is the source code for the bot used on @LifeOfChrome's Discord giveaway server.
 Features include point tracking and modification features, and an automated puzzle answer system (WIP).
 

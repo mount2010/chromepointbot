@@ -28,8 +28,8 @@ module.exports.embeds = {
      * @argument {number} points the amount of points this user has
      * @argument {boolean} isUserSame is the user being viewed the same as the one running the command?
      */
-    pointsEmbed: function (message, page, pageNumber, pageTotal, whosePoints, points, isUserSame) {
-        const embed = emojiEmbedBase(message, `${whosePoints}'s points`, ":1234:", true).setDescription(`${isUserSame?'You':'They'} have ${points} points.\n**Page ${pageNumber}/${pageTotal}**`);
+    pointsEmbed: function (message, page, pageNumber, pageTotal, whosePoints, points, isUserSame, creditInfo) {
+        const embed = emojiEmbedBase(message, `${whosePoints}'s points`, ":1234:", true).setDescription(`${isUserSame?'You':'They'} have ${points} points.\n**Page ${pageNumber}/${pageTotal}**\n${creditInfo}`);
         embed.fields = page;
         return embed;
     },
@@ -110,6 +110,11 @@ module.exports.embeds = {
         .setDescription(`Your points account has been created with ${config.joinPoints} starting points. \n For more information, check my help: ${config.prefix}help.`)
         .setImage(user.user.avatarURL);
     },
+    guildMemberAddDev: function (user) {
+        return new Discord.RichEmbed().setTitle(`:wave: Welcome to the server, ${user.user.username}`).setColor("#00ff00")
+        .setDescription(`It seems like I am in developer mode. You will need to ask an admin to initiate your account once it is back on production. \n Once I am back up, check my help: ${config.prefix}help.`)
+        .setImage(user.user.avatarURL);
+    },
     cooldown: function (message, cooldown, command) {
         return emojiEmbedBase(message, `That command is on cooldown, please hold on.`, ":clock:", false).setDescription(`Please wait ${Math.ceil(cooldown/1000)}s to use ${command}.`);
     },
@@ -118,5 +123,23 @@ module.exports.embeds = {
     },
     commandDoesntExistError: function (message, command) {
         return emojiEmbedBase(message, `${command} does not exist`, ":x:", false).setDescription(`Do ${config.prefix}help for help.`);
+    },
+    infoEmbed: function (message) {
+        const os = require("os");
+        let uptime = "0 minutes";
+        if (process.uptime() / 60 > 60) {
+            uptime = `${Math.floor(process.uptime()/60/60)} hours`;
+        }
+        else {
+            uptime = `${Math.floor(process.uptime()/60)} minutes`;
+        }
+        return emojiEmbedBase(message, "Information about me", ":information_source:", true)
+        .setDescription("Chrome Point Bot maintains point balances for the Chrome's Giveaway discord server. It also factilates community event hosting, etc.")
+        .addField(":books: Library", "discord.js", true)
+        .addField(":clock12: Uptime", `${uptime}`, true)
+        .addField(":man: Creator", "Mount2010#9649", true)
+        .addField(":heart: Repository", "[Star me on Github](https://github.com/mount2010/chromepointbot)", true)
+        .addField(":desktop: Host", "DigitalOcean", true)
+        .addField(":card_index: OS information", `OS ${os.arch()} ${os.type()} ${os.release()}\nI am using ${process.memoryUsage().heapTotal/1000/1000} MB of RAM`, true);
     }
 };

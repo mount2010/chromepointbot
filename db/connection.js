@@ -7,7 +7,8 @@ const pool = mysql.createPool({
     host: config.db.host,
     user: secrets.db.username,
     password: secrets.db.password,
-    database: config.db.database
+    database: config.db.database,
+    multipleStatements: config.db.multiplestatements
 });
 
 function doQuery (query) {

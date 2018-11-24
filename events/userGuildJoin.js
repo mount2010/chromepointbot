@@ -16,7 +16,14 @@ module.exports.register = ((bot)=>{
                 else {
                     connection.query(`INSERT INTO user (userid, points, history) VALUES ('${member.id}', ${config.joinPoints}, '${defaultHistory}')`, (error, res)=>{
                         if (error) {member.send(`Something went wrong with initializing your points account, please ask an admin to import your account: ${error}`);}
-                        else {member.send(embeds.guildMemberAdd(member));}
+                        else {
+                            if (process.argv[2] == "dev") {
+                                member.send(embeds.guildMemberAddDev(member));
+                            }
+                            else {
+                                member.send(embeds.guildMemberAdd(member));
+                            }
+                        }
                         console.log(`User ${member.user.username} joined, userid ${member.id}, DB ${JSON.stringify(res)}`);
                     });
                 }

@@ -5,6 +5,7 @@ class CommandHandler {
     constructor () {
         this.commands = new Map();
         this.cooldownManager = new CooldownManager();
+        this.hasWarnedAboutDev = false;
     }
     registerCommand (commandFileLink) {
         const command = require(`${process.cwd()}/${commandFileLink}`);
@@ -50,6 +51,10 @@ class CommandHandler {
     async go (what, client, message, args) {
         const cooldown = this.cooldownManager.checkCooldown(message.author);
         if (cooldown) {
+            if (process.argv[2] == "dev" && !this.hasWarnedAboutDev) {
+                message.channel.send(":warning: I am in dev mode - I am probably running on the development server and database. Things may not work.");
+                this.hasWarnedAboutDev = true;
+            }
             this.commands.get(what).run(client, message, args);
             this.cooldownManager.insertCooldown(message.author, what);
         }

@@ -13,6 +13,7 @@
     "db": {
         "host": "localhost",
         "port": "",
-        "database": "test"
+        "database": "test",
+        "multiplestatements": "true"
     }
 }
