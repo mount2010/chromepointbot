@@ -22,13 +22,14 @@ module.exports.run = function (client, message, args) {
         message.channel.send(embeds.invalidOrEmptyInput(message, "an invalid ID", "a valid ID", "Try again."));
         return false;
     }
-    if (args.length < 3) {message.channel.send(embeds.invalidOrEmptyInput(message, 'the credit balance to initiate this host with', 'no credit balance', "Try again - specify a credit amount as the third argument.")); return;}
-    if (args[2].match("[^0-9]") !== null) {message.channel.send(embeds.invalidOrEmptyInput(message, "only numbers in the credits amount", "some non numeric characters in the input", "Try again - likely a typo.")); return;}
-    const credits = parseInt(args[2]);
+    let credits;
 
     switch (operation) {
         case 'add':
         case 'a':
+            if (args.length < 3) {message.channel.send(embeds.invalidOrEmptyInput(message, 'the credit balance to initiate this host with', 'no credit balance', "Try again - specify a credit amount as the third argument.")); return;}
+            if (args[2].match("[^0-9]") !== null) {message.channel.send(embeds.invalidOrEmptyInput(message, "only numbers in the credits amount", "some non numeric characters in the input", "Try again - likely a typo.")); return;}
+            credits = parseInt(args[2]);
             successMessage = `Successfully added ${id} as an event host, and gave them ${credits} credits.`;
             if (hosts.indexOf(id) !== -1) {
                 message.channel.send("User already is a host.");
@@ -41,6 +42,9 @@ module.exports.run = function (client, message, args) {
         break;
         case 'edit':
         case 'e':
+            if (args.length < 3) {message.channel.send(embeds.invalidOrEmptyInput(message, 'the credit balance to initiate this host with', 'no credit balance', "Try again - specify a credit amount as the third argument.")); return;}
+            if (args[2].match("[^0-9]") !== null) {message.channel.send(embeds.invalidOrEmptyInput(message, "only numbers in the credits amount", "some non numeric characters in the input", "Try again - likely a typo.")); return;}
+            credits = parseInt(args[2]);
             successMessage = `Successfully edited ${id}'s credits to ${credits} credits.`;
             if (hosts.indexOf(id) === -1) {
                 message.channel.send("User is not a host. Use $host add <id> <credits> to add them as a host.");
@@ -48,10 +52,41 @@ module.exports.run = function (client, message, args) {
             }
             db.pool.getConnection(gotConnection);
         break;
+        case 'remove':
+        case 'r':
+            successMessage = `Successfully removed ${id} as an event host and reset their credits`;
+            if (hosts.indexOf(id) == -1) {
+                message.channel.send("User is not a host.");
+                return;
+            }
+            hosts.splice(hosts.indexOf(id));
+            file.hosts = hosts;
+            fs.writeFileSync(`${process.cwd()}/eventHosts.json`, JSON.stringify(file));
+            db.pool.getConnection(removeGetConnection);
+        break;
         default:
             message.channel.send(embeds.invalidOrEmptyInput("a valid operation", "something else", "You can \`add\` or \`edit\` a host."));
             return;
     }
+    function removeGetConnection (error, connection) {
+        if (error) {message.channel.send(embeds.errorOccured(message, error)); return;}
+        removeCheckUserExists(connection);
+    }
+    // should really merge this... but I don't want to figure out how rn
+    function removeCheckUserExists (connection) {
+        connection.query(`SELECT * FROM user WHERE userid=${connection.escape(id)}`, (error, result)=>{
+            if (error) {message.channel.send(embeds.errorOccured(message, error)); return;}
+            if (!result || result.length < 1) {message.channel.send(embeds.userDoesntHaveColumn(message, id));}
+            removeUpdateCredits(connection);
+        });
+    }
+    function removeUpdateCredits (connection) {
+        connection.query(`UPDATE user SET credits=0 WHERE userid=${connection.escape(id)}`, (error)=> {
+            if (error) {message.channel.send(embeds.errorOccured(message, error)); return;}
+            success();
+        });
+    }
+
     function gotConnection (error, connection) {
         if (error) {message.channel.send(embeds.errorOccured(message, error)); return;}
         checkUserExists(connection);
