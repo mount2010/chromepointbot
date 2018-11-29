@@ -15,5 +15,6 @@
         "port": "",
         "database": "test",
         "multiplestatements": "true"
-    }
+    },
+    "mainGuild": "428687622471417878"
 }

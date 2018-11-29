@@ -7,6 +7,7 @@ let registered;
 module.exports.register = ((bot)=>{
     const pool = require(`${process.cwd()}/db/connection.js`).pool;
     bot.on("guildMemberAdd", (member)=>{
+        if (member.guild.id !== config.mainGuild) {return;}
         pool.getConnection((err, connection)=> {
             connection.query(`SELECT * FROM user WHERE userid=${member.id}`, (err, res) => {
                 if (err) {member.send(`Something went wrong with initializing your points account. Please ask an admin to import your account: ${err}`);}
