@@ -111,7 +111,7 @@ module.exports.run = function (client, message, args) {
                         connection.release();
                         return;
                     }
-                    connection.query(`INSERT INTO user VALUES (${connection.escape(id)}, ${connection.escape(pointsOffset)}, "[]")`, 
+                    connection.query(`INSERT INTO user VALUES (${connection.escape(id)}, ${connection.escape(pointsOffset)}, "[]", 0)`, 
                     (err, res)=>{
                         if (err) {message.channel.send(embeds.errorOccured(message, err)); return;}
                         message.channel.send(`:ok_hand: \`\`\`json\n${JSON.stringify(res)}\`\`\``);
