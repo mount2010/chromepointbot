@@ -49,7 +49,7 @@ This will automatically download and install the dependencies (Discord.js, MySQL
 
 Log into MySQL and create a database (fill secrets.json with the DB name) and a table "user": 
 ```sql
-    CREATE TABLE user (userid VARCHAR(255), points INT, history TEXT);
+    CREATE TABLE user (userid VARCHAR(255), points INT, history TEXT, credits INT);
 ```
 
 ### 5. Configure the bot
