@@ -122,7 +122,10 @@ module.exports.info = {
     name: "event",
     help: "Manage, start, and give points as an event host",
     arguments: [
-        ["operation", "Operation to perform for your event"]
+        ["operation", "Operation to perform for your event. Can be `give`."],
+        ["user", "The person to give points to"],
+        ["credits", "Amount of credits to give"],
+        ["reason", "The reason for giving the credits."]
     ],
     restriction: "Event hosts only",
     cooldown: 0
