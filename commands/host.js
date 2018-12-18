@@ -65,7 +65,7 @@ module.exports.run = function (client, message, args) {
             db.pool.getConnection(removeGetConnection);
         break;
         default:
-            message.channel.send(embeds.invalidOrEmptyInput("a valid operation", "something else", "You can \`add\` or \`edit\` a host."));
+            message.channel.send(embeds.invalidOrEmptyInput("a valid operation", "something else", "You can \`add\`, \`remove\` or \`edit\` a host."));
             return;
     }
     function removeGetConnection (error, connection) {
@@ -117,7 +117,7 @@ module.exports.info = {
     name: "host",
     help: "Add a community event host",
     arguments: [
-        ["operation", "Operation to perform on the user. May be \`add\` or \`edit\`"],
+        ["operation", "Operation to perform on the user. May be \`add\`, \`remove\` or \`edit\`"],
         ["user", "User to add as a community event host"],
         ["credits", "Credits to edit or add to this user"]
     ],
