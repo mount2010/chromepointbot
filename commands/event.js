@@ -50,7 +50,9 @@ module.exports.run = function (client, message, args) {
             //really cant think of a better name sorry
             function go () {
                 if (args.length < 4) {reason = "from an event host that gave no reason";}
-                else {reason = args.split(3);}
+                else {reason = message.content.slice(message.content.indexOf(args[3]));}
+
+        
 
                 successMessage = `Success - deducted ${credits} credits from your balance and gave them to ${id}`;
                 db.pool.getConnection(gotConnection);
