@@ -8,7 +8,7 @@ module.exports.run = function (client, message, args) {
     let reason;
 
     if (args.length < 1) {
-        message.channel.send(embeds.invalidOrEmptyInput(message, "no operation", "a operation", "Do $help event for operations."));
+        message.channel.send(embeds.invalidOrEmptyInput(message, "no operation", "an operation", "Do $help event for operations."));
         return;
     }
     switch (operation) {
