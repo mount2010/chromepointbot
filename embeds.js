@@ -126,7 +126,7 @@ module.exports.embeds = {
     },
     infoEmbed: function (message) {
         const os = require("os");
-        let uptime = "0 minutes";
+
         if (process.uptime() / 60 > 60) {
             uptime = `${Math.floor(process.uptime()/60/60)} hours`;
         }
