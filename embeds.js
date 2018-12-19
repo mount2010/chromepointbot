@@ -125,8 +125,9 @@ module.exports.embeds = {
         return emojiEmbedBase(message, `${command} does not exist`, ":x:", false).setDescription(`Do ${config.prefix}help for help.`);
     },
     infoEmbed: function (message) {
+        let uptime = '0 minutes';
         const os = require("os");
-        let uptime = "0 minutes";
+
         if (process.uptime() / 60 > 60) {
             uptime = `${Math.floor(process.uptime()/60/60)} hours`;
         }
@@ -136,7 +137,7 @@ module.exports.embeds = {
         return emojiEmbedBase(message, "Information about me", ":information_source:", true)
         .setDescription("Chrome Point Bot maintains point balances for the Chrome's Giveaway discord server. It also factilates community event hosting, etc.")
         .addField(":books: Library", "discord.js", true)
-        .addField(":clock12: Uptime", `${uptime}`, true)
+        .addField(":clock12: Uptime", uptime, true)
         .addField(":man: Creator", "Mount2010#9649", true)
         .addField(":heart: Repository", "[Star me on Github](https://github.com/mount2010/chromepointbot)", true)
         .addField(":desktop: Host", "DigitalOcean", true)
