@@ -100,7 +100,7 @@ module.exports.run = async function (client, message, args) {
         async changePage (change) {
             const credits = this.result[0].credits;
             let creditInfo = '';
-            if (!!credits) {creditInfo = `This user is also an event host and has ${credits} credits left.`}
+            if (!!credits) {creditInfo = `This user is also an event host and has ${credits} credits left.`;}
             const history = this.pagedHistory[this.page] ? this.pagedHistory[this.page] :  [{name: "No history", value:"This user has no points history"}];
             /* const embed = embeds.pointsEmbed(this.page, this.pagedHistory.length, message, username, whosePoints, history, this.result[0].points); */
             const embed = embeds.pointsEmbed(message, history, this.page+1, this.pagedHistory.length, username,  this.result[0].points, whosePoints == message.author.id, creditInfo);
