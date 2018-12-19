@@ -83,7 +83,7 @@ module.exports.run = function (client, message, args) {
     function updateCredits (connection) {
         connection.query(`SELECT credits FROM user WHERE userid=${connection.escape(message.author.id)}`, (err, res)=>{
             if (err) {message.channel.send(embeds.errorOccured(message, err)); return;}
-            if (res[0].credits - credits <= 0) {message.channel.send("You have not enough credits to give."); return;}
+            if (res[0].credits - credits < 0) {message.channel.send("You have not enough credits to give."); return;}
             connection.query(`UPDATE user SET credits=${res[0].credits-credits} WHERE userid=${connection.escape(message.author.id)}`, (error)=> {
                 if (error) {message.channel.send(embeds.errorOccured(message, error)); return;}
                 getCurrentPoints(connection, (bal)=>{
